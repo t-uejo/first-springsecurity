@@ -49,7 +49,8 @@ public class SpringSecurityConfig {
         http.formLogin(login -> login
         		.loginPage("/login/loginForm")
         		.loginProcessingUrl("/login")
-        		.failureUrl("/login/loginForm?error=true"));
+        		.failureUrl("/login/loginForm?error=true")
+        		);
         
         http.logout(logout -> logout
         		.logoutSuccessUrl("/")
@@ -61,8 +62,10 @@ public class SpringSecurityConfig {
                 AnonymousAuthenticationFilter.class);
         http.sessionManagement(Customizer.withDefaults());
         
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(
-                new AntPathRequestMatcher("/**")).permitAll());
+        http.authorizeHttpRequests(authz -> authz
+        		.requestMatchers(new AntPathRequestMatcher("/login/**")).permitAll()
+        		.requestMatchers(new AntPathRequestMatcher("/**")).authenticated()
+				);
 
         return http.build();
     }

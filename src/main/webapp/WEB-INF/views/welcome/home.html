@@ -10,6 +10,10 @@
     <div id="wrapper">
         <h1 id="title">Hello world!</h1>
         <p th:text="|The time on the server is ${serverTime}.|">The time on the server is 2018/01/01 00:00:00 JST.</p>
+        <p th:object="${#authentication.principal.account}" th:text="|Welcome *{firstName} *{lastName} !! |"></p>
+        <ul>
+            <li><a th:href="@{/account}">view account</a></li>
+        </ul>
     </div>
 </body>
 </html>

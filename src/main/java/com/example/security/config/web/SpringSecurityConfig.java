@@ -45,13 +45,22 @@ public class SpringSecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin(Customizer.withDefaults());
-        http.logout(Customizer.withDefaults());
+    	
+        http.formLogin(login -> login
+        		.loginPage("/login/loginForm")
+        		.loginProcessingUrl("/login")
+        		.failureUrl("/login/loginForm?error=true"));
+        
+        http.logout(logout -> logout
+        		.logoutSuccessUrl("/")
+        		.deleteCookies("JSESSIONID"));
+        
         http.exceptionHandling(ex -> ex.accessDeniedHandler(
                 accessDeniedHandler()));
         http.addFilterAfter(userIdMDCPutFilter(),
                 AnonymousAuthenticationFilter.class);
         http.sessionManagement(Customizer.withDefaults());
+        
         http.authorizeHttpRequests(authz -> authz.requestMatchers(
                 new AntPathRequestMatcher("/**")).permitAll());
 

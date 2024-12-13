@@ -11,6 +11,11 @@
         <h1 id="title">Hello world!</h1>
         <p th:text="|The time on the server is ${serverTime}.|">The time on the server is 2018/01/01 00:00:00 JST.</p>
         <p th:object="${#authentication.principal.account}" th:text="|Welcome *{firstName} *{lastName} !! |"></p>
+		<p>
+		    <form th:action="@{/logout}" method="post">
+		        <button type="submit">Logout</button>
+		    </form>
+		</p>
         <ul>
             <li><a th:href="@{/account}">view account</a></li>
         </ul>

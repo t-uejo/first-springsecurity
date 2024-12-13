@@ -2,13 +2,18 @@ package com.example.security.config.web;
 
 import java.util.LinkedHashMap;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
@@ -68,6 +73,24 @@ public class SpringSecurityConfig {
 				);
 
         return http.build();
+    }
+    
+    /**
+     * Configure {@link AuthenticationProvider} bean.
+     * @param userDetailsService Bean defined within Application
+     * @param passwordEncoder Bean defined by ApplicationContext#passwordEncoder
+     * @return Bean of configured {@link AuthenticationProvider}
+     */
+    @Bean
+    public AuthenticationProvider authenticationProvider(
+    		UserDetailsService sampleUserDetailsService,
+    		@Qualifier("passwordEncoder") PasswordEncoder passwordEncoder) {
+    	
+    	DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    	daoAuthenticationProvider.setUserDetailsService(sampleUserDetailsService);
+    	daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+    	
+    	return daoAuthenticationProvider;
     }
 
     /**
